@@ -49,9 +49,14 @@ Create the database and grant the created user as owner:
 
 ## Running gatewayd
 
-The executable is located at bin/gateway:
+Finally add `gatewayd` to your PATH using npm link
 
-    bin/gateway start
+    sudo npm link
+
+Now you will be able to start your gatewayd
+
+    gatewayd start
+    gatewayd --help
 
 ## Configure gatewayd
 
