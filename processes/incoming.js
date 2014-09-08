@@ -1,12 +1,12 @@
-var gateway = require(__dirname+'/../');
+var gatewayd = require(__dirname+'/../');
 
-var Listener = require(__dirname+'/../lib/ripple/listener.js');
+var Listener = require(__dirname+'/../lib/ripple_listener.js');
 
 var listener = new Listener();
 
 listener.onPayment = function(payment) {
   logger.info('payment:notification:received', payment);
-  if (payment && payment.destination_account === gateway.config.get('COLD_WALLET')) {
+  if (payment && payment.destination_account === gatewayd.config.get('COLD_WALLET')) {
     var opts = {
       destinationTag : payment.destination_tag,
       transaction_state : payment.result,
@@ -20,7 +20,7 @@ listener.onPayment = function(payment) {
           opts.currency = balanceChange.currency;
           opts.issuer = balanceChange.issuer;
           opts.state = 'incoming';
-          gateway.api.recordIncomingPayment(opts, function(error, record) {
+          gatewayd.api.recordIncomingPayment(opts, function(error, record) {
             if (error) {
               logger.error('payment:incoming:error', error);
             } else {
@@ -37,7 +37,7 @@ listener.onPayment = function(payment) {
   }
 };
 
-listener.start(gateway.config.get('LAST_PAYMENT_HASH'));
+listener.start(gatewayd.config.get('LAST_PAYMENT_HASH'));
 
 logger.info('Listening for incoming ripple payments from Ripple REST.');
 
