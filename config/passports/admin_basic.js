@@ -10,19 +10,17 @@ function verifyAdmin(username, password){
   }
 }
 
-function adminBasicAuthMiddleware() {
-  var auth = new BasicStrategy(
-    function(username, password, done) {
-      if (verifyAdmin(username, password)) {
-        return done(null, { admin: true });
-      } else {
-        return done(null, false);
-      }
+var adminBasicAuthStrategy = new BasicStrategy(
+  function(username, password, done) {
+    if (verifyAdmin(username, password)) {
+      return done(null, { admin: true });
+    } else {
+      return done(null, false);
     }
-  );
-  auth.name = name;
-  return auth;
-}
+  }
+);
 
-module.exports = adminBasicAuthMiddlware;
+adminBasicAuthStrategy.name = 'adminBasic';
+
+module.exports = adminBasicAuthStrategy;
 

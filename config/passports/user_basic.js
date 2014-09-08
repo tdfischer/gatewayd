@@ -1,27 +1,27 @@
 const BasicStrategy = require('passport-http').BasicStrategy;
-const gateway = require(__dirname + '/../../');
+const gatewayd = require(__dirname + '/../../');
 
 function verifyAdmin(username, password){
-  if (username === gateway.config.get('KEY') ||
-      password === gateway.config.get('KEY')) {
+  if (username === gatewayd.config.get('KEY') ||
+      password === gatewayd.config.get('KEY')) {
     return true;
   } else {
     return false;
   }
 }
 
-const userBasicAuthMiddleware = new BasicStrategy(
+var userBasicAuthStrategy = new BasicStrategy(
   function(username, password, done) {
     if (verifyAdmin(username, password)) {
       return done(null, { admin: true });
     } else {
-      gateway.data.users.read({ name: username }, function (err, user) {
+      gatewayd.data.users.read({ name: username }, function (err, user) {
         logger.info(user);
 
         if (err) { return done(err); }
         if (!user) { return done(null, false); }
         if (user) {
-          var verified = gateway.data.users.verifyPassword(password, user.salt, user.password_hash);
+          var verified = gatewayd.data.users.verifyPassword(password, user.salt, user.password_hash);
           if (verified) {
             return done(null, user);
           } else {
@@ -34,7 +34,7 @@ const userBasicAuthMiddleware = new BasicStrategy(
   }
 );
 
-userBasicAuthMiddlware.name = name;
+userBasicAuthStrategy.name = 'userBasic';
 
-module.exports = userBasicAuthMiddlware;
+module.exports = userBasicAuthStrategy;
 
