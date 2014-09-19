@@ -1,7 +1,6 @@
 var requireAll = require('require-all-to-camel');
 
 exports.config = require(__dirname + '/lib/config.js');
-exports.data  = require(__dirname +'/lib/data/');
 exports.models = requireAll(__dirname +'/lib/data/models/');
 exports.api = requireAll(__dirname+'/lib/api/');
 exports.errors = requireAll(__dirname+'/lib/errors/');
