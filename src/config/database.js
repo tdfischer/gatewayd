@@ -5,7 +5,7 @@ var databaseUrl = config.get('DATABASE_URL');
 
 if (databaseUrl) {
   var match = databaseUrl.match(/postgres:\/\/([^:]+):([^@]+)@([^:]+):(\d+)\/(.+)/);
-  var db = new Sequelize(match[5], match[1], match[2], {
+  var database = new Sequelize(match[5], match[1], match[2], {
     dialect: 'postgres',
     protocol: 'postgres',
     port: match[4],
@@ -16,7 +16,10 @@ if (databaseUrl) {
     underscored: true
   });
 } else {
-  throw new Error('DATABASE_URL env variable is required');
+  var database = new Sequelize('database', 'username', 'password', {
+    dialect: 'sqlite',
+    storage: __dirname+'/../../config/database.sqlite'
+  })
 }
 
-module.exports = db;
+module.exports = database;
